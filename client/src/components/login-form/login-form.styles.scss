@@ -1,0 +1,26 @@
+
+
+.forminput {
+    width: 70%;
+}
+
+
+.loginForm {
+    margin-top: 8rem;
+}
+#fullWidth {
+    width: 10rem;
+}
+
+.loginForm__button-start {
+    width: 10rem;
+    height: 4rem;
+    color: white;
+    background-color: #0163cc;
+    margin-top: 3rem;
+
+    &:hover {
+        transform: scale(1.1);
+    }
+    
+}
