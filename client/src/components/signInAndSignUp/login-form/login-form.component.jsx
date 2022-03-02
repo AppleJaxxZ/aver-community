@@ -11,26 +11,8 @@ const LoginForm = () => {
     const [phone, setPhone] = useState('');
     // const [data, setData] = useState(null);
 
-    useEffect(() => {
-        const objed = {
-            pin: localStorage.getItem('pin'),
-            dob: localStorage.getItem('dob'),
-            phone: localStorage.getItem('phone')
-        }
-        axios.post('/api', objed).then(res => console.log("Schedule Sent."))
-
-        // fetch('/api').then((res) => res.json()).then((data) => setData(data.message))
-    }, [pin]);
-
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-        localStorage.setItem('pin', pin);
-        localStorage.setItem('dob', dob);
-        localStorage.setItem('phone', phone);
-        e.target.reset()
-
-        alert(`Submitting ${pin}, ${dob}, and ${phone}.  Time to sick back, relax, and let your scheduled alerts come to you.  Cheers! `);
 
     }
     return (
