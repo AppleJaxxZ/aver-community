@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css';
-import Layout from './components/signInAndSignUp/layout/layout.jsx'
 import { Routes, Route } from 'react-router-dom'
 import UserDashboard from './pages/dashboard/user-dashboard.page';
 import Homepage from './pages/home/home.page';
