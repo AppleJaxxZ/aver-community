@@ -3,7 +3,7 @@ import './sign-up-form.styles.scss'
 import { useForm } from "react-hook-form";
 import { TextField, Button } from '@mui/material';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 
@@ -27,7 +27,7 @@ const schema = yup.object({
 const SignUpForm = () => {
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
-    const [isLoggedInUser, setIsLoggedInUser] = useState("");
+    const [isLoggedInUser, setIsLoggedInUser] = useState(null);
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: yupResolver(schema)
@@ -37,10 +37,11 @@ const SignUpForm = () => {
 
     useEffect(() => {
         const loggedInUser = localStorage.getItem("user");
-        if (loggedInUser) {
-            const foundUser = JSON.parse(loggedInUser);
-            setIsLoggedInUser(foundUser);
-        }
+        console.log(loggedInUser)
+        console.log(JSON.parse(loggedInUser))
+        const foundUser = JSON.parse(loggedInUser);
+        setIsLoggedInUser(foundUser);
+
     }, []);
 
 
@@ -55,8 +56,9 @@ const SignUpForm = () => {
                 if (response.status === 201) {
                     console.log("Account Creation Success!")
                     setIsLoggedInUser(response.data)
-                    localStorage.setItem('user', response.data)
-                    console.log(response.data)
+                    localStorage.setItem("user", JSON.stringify(response.data))
+
+                    console.log("THIS IS THE RESPONSE DATA SAVED", response.data)
                     history("/welcome-sign-in")
                 } else {
                     return;
@@ -78,7 +80,18 @@ const SignUpForm = () => {
     }
 
     if (isLoggedInUser) {
-        return <div>{isLoggedInUser.name} is loggged in</div>;
+        console.log(isLoggedInUser)
+        return <div>
+
+            <span>{isLoggedInUser.user.name} is loggged in...Sign out of the current user first to sign up another user.</span>
+            <ul style={{ listStyle: "none", display: "flex", justifyContent: "space-around" }}>
+                <li><Link to="/">Home</Link></li>
+                <li><Link to="/dashboard">{isLoggedInUser.user.name} 's Dashboard</Link></li>
+                <li><button>Sign Me Out</button></li>
+
+            </ul>
+        </div>;
+
     }
 
     return (

@@ -10,8 +10,8 @@ const Header = () => {
     return (
         <div>
             <h1>Aver-Sms</h1>
-            <h2>Never Miss</h2>
-            <h3>Never Forget</h3>
+            <h2>Your Report Schedule..</h2>
+            <h3>Everynight at 9:05 Eastern Standard Time.</h3>
 
 
         </div>
