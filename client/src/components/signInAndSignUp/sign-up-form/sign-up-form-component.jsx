@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './sign-up-form.styles.scss'
 import { useForm } from "react-hook-form";
 import { TextField, Button } from '@mui/material';
@@ -25,33 +25,60 @@ const schema = yup.object({
 }).required();
 
 const SignUpForm = () => {
+    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
+    const [isLoggedInUser, setIsLoggedInUser] = useState("");
+
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: yupResolver(schema)
     });
     const history = useNavigate();
-    const onSubmit = data => {
-        console.log(data);
-        axios.post('http://localhost:5000/users', data).then(function (response) {
 
-            console.log(response);
-            console.log(response.status)
 
-            if (response.status === 201) {
-                history("/welcome-sign-in")
-            } else {
-                return;
-            }
-        }).catch((error) => {
-            console.log(error.response.status, "400 BAD REQUEST")
-            if (error.response.status === 400) {
-                alert("Please read the instructions below and fix your inputs")
-            }
+    useEffect(() => {
+        const loggedInUser = localStorage.getItem("user");
+        if (loggedInUser) {
+            const foundUser = JSON.parse(loggedInUser);
+            setIsLoggedInUser(foundUser);
+        }
+    }, []);
 
-        })
 
-        console.log(data);
-        reset();
 
+
+
+    const onSubmit = async (data) => {
+
+        try {
+            axios.post('http://localhost:5000/users', data).then(function (response) {
+
+                if (response.status === 201) {
+                    console.log("Account Creation Success!")
+                    setIsLoggedInUser(response.data)
+                    localStorage.setItem('user', response.data)
+                    console.log(response.data)
+                    history("/welcome-sign-in")
+                } else {
+                    return;
+                }
+            }).catch((error) => {
+                console.log(error.response.status, "400 BAD REQUEST")
+                if (error.response.status === 400) {
+                    alert("Please read the instructions below and fix your inputs")
+                }
+
+            })
+
+            console.log(data);
+            reset();
+        } catch (error) {
+            console.error(error)
+        }
+
+    }
+
+    if (isLoggedInUser) {
+        return <div>{isLoggedInUser.name} is loggged in</div>;
     }
 
     return (
@@ -60,9 +87,9 @@ const SignUpForm = () => {
                 <span className="signUp">Sign Up</span>
                 <TextField required id="outlined-basic" {...register("name")} margin="normal" type="text" label="Name" placeholder='First or last name' varient="outlined" className="forminput signUpForm__input-createUsername" />
                 <p>{errors.username?.message}</p>
-                <TextField required id="outlined-basic" {...register("email")} margin="normal" type="email" label="Email" placeholder='Create an email' varient="outlined" className="forminput signUploginForm__input-email" />
+                <TextField required id="outlined-basic" {...register("email")} margin="normal" value={email} onChange={({ target }) => setEmail(target.value)} type="email" label="Email" placeholder='Create an email' varient="outlined" className="forminput signUploginForm__input-email" />
                 <p>{errors.email?.message}</p>
-                <TextField required id="outlined-basic"  {...register("password")} margin="normal" type="password" label="Password" placeholder='Create a password' varient="outlined" className="forminput signUploginForm__input-password" />
+                <TextField required id="outlined-basic"  {...register("password")} value={password} onChange={({ target }) => setPassword(target.value)} margin="normal" type="password" label="Password" placeholder='Create a password' varient="outlined" className="forminput signUploginForm__input-password" />
                 <p>{errors.password?.message}</p>
                 <TextField required id="outlined-basic"  {...register("confirmpassword")} margin="normal" type="password" label="Confirm Password" placeholder='Confirm password' varient="outlined" className="forminput signUploginForm__input-password" />
                 <p>{errors.confirmpassword?.message}</p>
