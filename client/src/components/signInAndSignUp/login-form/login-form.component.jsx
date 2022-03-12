@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import './login-form.styles.scss'
 import { TextField, Button } from '@mui/material';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import Layout from '../layout/layout';
+import SignOutButton from '../../sign-out-button/sign-out-button.component';
 
 
 
@@ -57,7 +59,18 @@ const LoginForm = () => {
     }
 
     if (loggedInUser) {
-        return <div>{loggedInUser.email} is logged in</div>
+        return <Layout>
+            <div>
+                <h1>Sign In Page</h1>
+                <span>{loggedInUser.user.name} is logged in, please logout, then sign-in to another users account.</span>
+                <ul style={{ listStyle: "none", display: "flex", justifyContent: "space-around" }}>
+                    <li><Link to="/">Home</Link></li>
+                    <li><Link to="/dashboard">{loggedInUser.user.name} 's Dashboard</Link></li>
+                    <li><SignOutButton>SIGN ME OUT</SignOutButton></li>
+                </ul>
+
+            </div>
+        </Layout>
     }
 
     return (
