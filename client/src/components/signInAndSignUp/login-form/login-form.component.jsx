@@ -10,10 +10,10 @@ import SignOutButton from '../../sign-out-button/sign-out-button.component';
 
 
 const LoginForm = () => {
-    const [loggedInUser, setLoggedInUser] = useState("")
+    const [loggedInUser, setLoggedInUser] = useState()
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const history = useNavigate();
+    const navigate = useNavigate();
 
     const regex = /^.*(?=.{6,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/;
     const errorMessage = "Password must contain at least 8 characters, one uppercase, one number and one special case character";
@@ -21,39 +21,42 @@ const LoginForm = () => {
 
 
     useEffect(() => {
-        const loggedInUser = localStorage.getItem("user");
-        if (loggedInUser) {
-            const foundUser = JSON.parse(loggedInUser);
+        const signedInUser = localStorage.getItem("user")
+        console.log("SIGNED IN USER", signedInUser);
+        if (signedInUser) {
+            const foundUser = JSON.parse(signedInUser);
+            console.log(foundUser)
             setLoggedInUser(foundUser);
         }
     }, []);
 
 
 
-    const handleSubmit = async (data) => {
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const userCredentials = { email, password };
 
-        const loggedInUser = { email, password };
 
-        axios.post('http://localhost:5000/users/login', loggedInUser).then(function (response) {
+        axios.post('http://localhost:5000/users/login', userCredentials).then(function (response) {
 
-            if (response.status === 201) {
+            if (response.status === 200) {
                 console.log("Account Login Success!")
+                console.log(response.status)
                 setLoggedInUser(response.data)
-                localStorage.setItem('user', response.data)
-                console.log(response.data)
-                history("/welcome-sign-in")
+                localStorage.setItem('user', JSON.stringify(response.data))
+                navigate("/welcome-sign-in")
             } else {
                 return;
             }
         }).catch((error) => {
-            console.log(error.response.status, "400 BAD REQUEST")
-            if (error.response.status === 400) {
+            if (error.status === 400) {
+                console.log("400 BAD REQUEST")
                 alert("Please read the instructions below and fix your inputs")
             }
 
         })
 
-        console.log(data);
+
 
 
     }
@@ -76,7 +79,7 @@ const LoginForm = () => {
     return (
 
         <div className="form__centered">
-            <form onSubmit={handleSubmit} method='POST' action="/api" className="loginForm">
+            <form onSubmit={handleSubmit} className="loginForm">
                 <span className="signIn-header" >Login</span>
                 <TextField autoComplete='true' margin="normal" value={email} onChange={({ target }) => setEmail(target.value)} required id="outlined-basic" type='text' label="Enter your email" placeholder="ex. yourEmail@gmail.comx" variant="outlined" className="forminput loginForm__input-pin" />
 
@@ -85,7 +88,7 @@ const LoginForm = () => {
                 <br />
 
 
-                <br /> <Button type="submit" variant="contained" className="loginForm__button-start" >Login Up</Button>
+                <br /> <Button type="submit" variant="contained" className="loginForm__button-start" >Login</Button>
 
                 {/* <p>{!data ? "Loading..." : data}</p> */}
 

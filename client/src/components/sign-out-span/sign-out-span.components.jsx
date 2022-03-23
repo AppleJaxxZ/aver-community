@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import "./sign-out-button.styles.scss"
 import axios from "axios"
 import { useNavigate } from "react-router-dom";
 
 
 
 
-const SignOutButton = () => {
+const SignOutSpan = () => {
     const navigate = useNavigate();
     const handleLogout = async (e) => {
         const signOutToken = JSON.parse(localStorage.getItem("user"));
@@ -38,8 +37,8 @@ const SignOutButton = () => {
 
     };
     return (
-        <div><button onClick={handleLogout}>SIGN OUT</button></div>
+        <div><span onClick={handleLogout}>SIGN OUT</span></div>
     )
 }
 
-export default SignOutButton;
+export default SignOutSpan;

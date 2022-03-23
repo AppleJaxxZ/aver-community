@@ -56,10 +56,8 @@ const SignUpForm = () => {
                 if (response.status === 201) {
                     console.log("Account Creation Success!")
                     setIsLoggedInUser(response.data)
-                    localStorage.setItem("user", JSON.stringify(response.data))
-
                     console.log("THIS IS THE RESPONSE DATA SAVED", response.data)
-                    history("/welcome-sign-in")
+                    history("/signIn")
                 } else {
                     return;
                 }

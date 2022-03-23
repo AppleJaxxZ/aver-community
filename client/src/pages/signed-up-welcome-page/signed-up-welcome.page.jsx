@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import "./signed-up-welcome.styles.scss"
 import { Link } from 'react-router-dom';
 import PageLayout from '../pages-layout/pages-layout.layout';
+import Layout from '../../components/signInAndSignUp/layout/layout';
+
 
 const SignedInWelcomePage = () => {
     const [isAUserLoggedIn, setIsAUserLoggedIn] = useState(null)
@@ -20,16 +22,25 @@ const SignedInWelcomePage = () => {
     }, []);
     return (
         <PageLayout>
-            <span>Thank you for using Aver-Community</span>
-            <h2>How To Guide: </h2>
-            <p>Written By yours truely</p>
-            <div>
-                {
-                    isAUserLoggedIn ? <Link to="/dashboard">CONTINUE TO DASHBOARD PAGE</Link> : <Link to="/">Home</Link>
-                }
+            <Layout>
+                <span>Thank you for using Aver-Community</span>
+                <h2>How To Guide: </h2>
+                <h3>Hello and welcome to Aver-Community, an application that allows you to receive your AverHealth
+                    schedule every night via text-message.
+                </h3>
+                <h4>Lets get started...</h4>
 
-            </div>
+                <ul>
 
+                </ul>
+
+                <div>
+                    {
+                        isAUserLoggedIn ? <Link to="/dashboard">CONTINUE TO DASHBOARD PAGE</Link> : <Link to="/">Home</Link>
+                    }
+
+                </div>
+            </Layout>
         </PageLayout>
     )
 }

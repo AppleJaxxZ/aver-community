@@ -7,7 +7,7 @@ const auth = require("../middleware/auth");
 //Creates a new User and Verifies User
 router.post("/users", async (req, res) => {
     const user = new User(req.body);
-    console.log(user)
+
     try {
         await user.save();
         sendWelcomeEmail(user.email, user.name);
@@ -66,7 +66,7 @@ router.get("/users/me", auth, async (req, res) => {
 //Updates User Info
 router.patch("/users/me", auth, async (req, res) => {
     const updates = Object.keys(req.body);
-    const allowedUpdates = ["name", "email", "password", "age"];
+    const allowedUpdates = ["name", "email", "password", "pinNumber", "dateOfBirth"];
     const isValidOperation = updates.every((update) =>
         allowedUpdates.includes(update)
     );
